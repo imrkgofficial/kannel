@@ -7,8 +7,10 @@ jobs:
     runs-on: ubuntu-latest
   
     steps:
-      - name: Code Checkout
+      - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       
       - name: Login to AWS
         uses: aws-actions/configure-aws-credentials@v4
@@ -19,24 +21,25 @@ jobs:
 
   build-and-push-pub-ecr:
     runs-on: ubuntu-latest
-    needs:
-          login-to-aws
+    needs: login-to-aws
     steps:
-      - name: Code Checkout
+      - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       
-      - name: Login to AWSECR
+      - name: Debug - List Files
+        run: ls -R
+      
+      - name: Login to AWS ECR
         uses: docker/login-action@v3
         with:
           registry: public.ecr.aws
           username: ${{ secrets.ACCESS_KEY }}
           password: ${{ secrets.SECRET_ACCESS_KEY }}
-        env:
-          aws-region: ${{ secrets.REGION }}
 
-      - name: Build Image
+      - name: Build and Push Docker Image
         run: |
           docker build -t kannel .
-          docker tag kannel:latest public.ecr.aws/h8o8x8t1/kannel:v1
-          docker push public.ecr.aws/h8o8x8t1/kannel:v1
-        
+          docker tag kannel:latest public.ecr.aws/h8o8x8t1/kannel:v2
+          docker push public.ecr.aws/h8o8x8t1/kannel:v2
