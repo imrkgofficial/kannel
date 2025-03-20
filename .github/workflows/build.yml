@@ -1,14 +1,15 @@
 name: Build to AWS ECR
-on: push
+on: 
+  push
 
-  jobs:
-    login-to-aws:
-      runs-on: ubuntu-latest
-    
-      steps:
+jobs:
+  login-to-aws:  # Fix indentation here
+    runs-on: ubuntu-latest
+  
+    steps:
       - name: Code Checkout
         uses: actions/checkout@v4
-        
+      
       - name: Login to AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
