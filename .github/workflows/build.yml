@@ -28,8 +28,11 @@ jobs:
         with:
           fetch-depth: 0
       
-      - name: Debug - List Files
+      - name: Debug - List Files in Root
         run: ls -la
+
+      - name: Debug - List All Files in Repo
+        run: find . -type f
       
       - name: Login to AWS ECR
         uses: docker/login-action@v3
